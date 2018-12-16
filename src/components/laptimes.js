@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
-
-class FormatTime extends Component {
+class Laptime extends Component {
     constructor (props) {
-        
+        debugger;
         super(props);
 
         this.state = {
@@ -39,17 +38,17 @@ class FormatTime extends Component {
 
     }
     componentWillReceiveProps(nextProps) {
-
-        const { elapsed } = nextProps;
-
-        const sec = elapsed/1000;
+    
+        let { times } = nextProps;
+        times = times.pop();
+        const sec = times/1000;
         const min = sec/60;
-
+        
         this.setState({
             hour: Math.floor(min/60),
             min: Math.floor(min % 60),
             sec: Math.floor(sec % 60),
-            ms: Math.floor(elapsed % 100),
+            ms: Math.floor(times % 100),
         })
 
         
@@ -62,4 +61,4 @@ class FormatTime extends Component {
     }
 }
 
-export default FormatTime;
+export default Laptime;

@@ -1,6 +1,7 @@
 import React, { Component }from 'react';
 import ReactDOM from 'react-dom';
 import FormatTime from './format_time';
+import Laptime from './laptimes.js';
 
 class Stopwatch extends Component {
     constructor (props) {
@@ -10,6 +11,7 @@ class Stopwatch extends Component {
             status: 'stopped',
             start: null,
             elapsed: 0,
+            lapTimes: []
         }
         this.start = this.start.bind(this);
         this.stop = this.stop.bind(this);
@@ -17,9 +19,15 @@ class Stopwatch extends Component {
         this.reset = this.reset.bind(this);
     }
     start() {
+        const { start, elapsed } = this.state;
+        let newStart = new Date().getTime();
+
+        if (start !== null) {
+            newStart = newStart - elapsed;
+        }
         this.setState({
             status: 'running',
-            start: new Date().getTime()
+            start: newStart
         });
         setTimeout(this.update, 10);
         
@@ -44,6 +52,8 @@ class Stopwatch extends Component {
     }
 
     reset () {
+        this.state.lapTimes.push(<li>{this.state.start}</li>);
+
         this.setState({
             status: 'stopped',
             start: null,
@@ -52,7 +62,10 @@ class Stopwatch extends Component {
     }
 
     render() {
-        const {elapsed, status} = this.state;
+        const {elapsed, status, lapTimes} = this.state;
+       
+
+        
         return (
             <div className="jumbotron">
                 <h1 className="display-3"><FormatTime elapsed={elapsed}/></h1>
@@ -63,6 +76,7 @@ class Stopwatch extends Component {
                     <button className="btn btn-outline-danger mx-3" onClick={this.stop}>Stop</button>
                     <button className="btn btn-outline-warning mx-3" onClick={this.reset}>Reset</button>
                 </p>
+                <div><ul><Laptime times={lapTimes}/></ul></div>
             </div>
         )
         
